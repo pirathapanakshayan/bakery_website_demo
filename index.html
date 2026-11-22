@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Morrow Bakehouse · Sourdough & pastries in Bristol</title>
+  <meta name="description" content="Morrow Bakehouse bakes sourdough, buns and pastries through the morning on Mill Lane, Bristol. Pre-order for tomorrow.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --night: #141a3a;
+      --enamel: #2340c8;
+      --butter: #f4c542;
+      --crust: #7a4321;
+      --flour: #fafaf7;
+      --ink: #1b1d2a;
+      --muted: #5b5e6e;
+      --line: #e3e3dc;
+
+      --display: "Gloock", Georgia, "Times New Roman", serif;
+      --body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+      --step--1: 0.875rem;
+      --step-0: 1.0625rem;
+      --step-1: 1.375rem;
+      --step-2: 1.875rem;
+      --step-3: clamp(2.25rem, 4vw, 3.25rem);
+      --step-4: clamp(2.75rem, 7vw, 5.75rem);
+
+      --wrap: 1180px;
+      --gutter: clamp(1.25rem, 4vw, 3rem);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: var(--body);
+      font-size: var(--step-0);
+      line-height: 1.6;
+      color: var(--ink);
+      background: var(--flour);
+      -webkit-font-smoothing: antialiased;
+    }
+    img { max-width: 100%; display: block; }
+    a { color: inherit; }
+    :focus-visible { outline: 3px solid var(--butter); outline-offset: 3px; border-radius: 4px; }
+
+    .wrap { width: min(100% - 2 * var(--gutter), var(--wrap)); margin-inline: auto; }
+
+    /* ---------- Header ---------- */
+    .site-header {
+      position: sticky; top: 0; z-index: 20;
+      background: color-mix(in srgb, var(--flour) 92%, transparent);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--line);
+    }
+    .site-header .wrap { display: flex; align-items: center; gap: 2rem; height: 68px; }
+    .logo { font-family: var(--display); font-size: 1.6rem; text-decoration: none; letter-spacing: -0.01em; }
+    .nav { display: flex; gap: 1.75rem; margin-left: auto; }
+    .nav a { text-decoration: none; font-weight: 500; color: var(--muted); }
+    .nav a:hover { color: var(--ink); }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: 0.8rem 1.35rem; border-radius: 999px;
+      font: 600 var(--step-0)/1 var(--body);
+      text-decoration: none; border: 2px solid transparent; cursor: pointer;
+      transition: background-color .2s, color .2s;
+    }
+    .btn-primary { background: var(--enamel); color: #fff; }
+    .btn-primary:hover { background: var(--night); }
+    .btn-ghost { border-color: var(--ink); color: var(--ink); background: transparent; }
+    .btn-ghost:hover { background: var(--ink); color: var(--flour); }
+    .menu-toggle { display: none; margin-left: auto; background: none; border: 0; font: 600 1rem var(--body); cursor: pointer; padding: .5rem; }
+
+    /* ---------- Hero ---------- */
+    .hero { padding-block: clamp(2.5rem, 6vw, 5rem) clamp(3rem, 7vw, 6rem); }
+    .hero .wrap { display: grid; grid-template-columns: 1.05fr 1fr; gap: clamp(2rem, 5vw, 4.5rem); align-items: center; }
+    .status {
+      display: inline-flex; align-items: center; gap: .55rem;
+      font-weight: 600; font-size: var(--step--1);
+      padding: .45rem .9rem; border-radius: 999px; background: #eef0fb; color: var(--enamel);
+      margin-bottom: 1.5rem;
+    }
+    .status::before { content: ""; width: .55rem; height: .55rem; border-radius: 50%; background: currentColor; }
+    .status.is-closed { background: #f1efe9; color: var(--crust); }
+    .hero h1 {
+      font-family: var(--display); font-weight: 400;
+      font-size: var(--step-4); line-height: 1.02; letter-spacing: -0.02em;
+      margin: 0 0 1.5rem; max-width: 12ch;
+    }
+    .hero p { font-size: var(--step-1); color: var(--muted); max-width: 34ch; margin: 0 0 2rem; line-height: 1.5; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: .85rem; }
+    .hero-photo {
+      aspect-ratio: 4 / 5; border-radius: 28px 28px 220px 28px;
+      background:
+        url("images/hero.jpg") center / cover no-repeat,
+        radial-gradient(circle at 30% 35%, #e9b46b 0 18%, transparent 19%),
+        radial-gradient(circle at 62% 58%, #c98a45 0 22%, transparent 23%),
+        linear-gradient(160deg, #f3d9a8, #b87533 70%, var(--crust));
+      position: relative;
+    }
+    .hero-photo figcaption {
+      position: absolute; left: 1.25rem; bottom: 1.25rem;
+      background: var(--flour); padding: .6rem 1rem; border-radius: 14px;
+      font-size: var(--step--1); font-weight: 600; box-shadow: 0 8px 24px rgba(20, 26, 58, .18);
+    }
+
+    /* ---------- Oven timeline (signature scroll section) ---------- */
+    .oven {
+      --sky: var(--night);
+      background: var(--sky);
+      color: #fff;
+      transition: background-color .25s linear;
+    }
+    .oven .wrap { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gutter); }
+    .oven-sticky {
+      position: sticky; top: 68px; height: calc(100vh - 68px);
+      display: flex; flex-direction: column; justify-content: center;
+    }
+    .oven-sticky h2 { font: 400 var(--step-2)/1.2 var(--display); margin: 0 0 1rem; max-width: 16ch; }
+    .clock {
+      font-family: var(--display);
+      font-size: clamp(5rem, 15vw, 12rem);
+      line-height: .9; letter-spacing: -0.04em;
+      font-variant-numeric: tabular-nums;
+      color: var(--butter);
+    }
+    .clock-note { margin-top: 1.25rem; color: rgba(255,255,255,.75); max-width: 30ch; }
+    .oven-steps { list-style: none; margin: 0; padding: 30vh 0; }
+    .oven-step {
+      min-height: 55vh; display: flex; flex-direction: column; justify-content: center;
+      opacity: .35; transition: opacity .3s;
+    }
+    .oven-step.is-active { opacity: 1; }
+    .oven-step time { font-weight: 700; font-size: var(--step--1); color: var(--butter); }
+    .oven-step h3 { font: 400 var(--step-3)/1.05 var(--display); margin: .4rem 0 .75rem; }
+    .oven-step p { margin: 0; max-width: 36ch; color: rgba(255,255,255,.82); }
+    .oven.is-day { color: var(--ink); }
+    .oven.is-day .oven-step p, .oven.is-day .clock-note { color: var(--muted); }
+    .oven.is-day .clock, .oven.is-day .oven-step time { color: var(--crust); }
+
+    /* ---------- Menu board ---------- */
+    .section { padding-block: clamp(4rem, 9vw, 7.5rem); }
+    .section-head { display: flex; align-items: end; justify-content: space-between; gap: 2rem; margin-bottom: clamp(2rem, 4vw, 3rem); flex-wrap: wrap; }
+    .section-head h2 { font: 400 var(--step-3)/1.05 var(--display); margin: 0; max-width: 18ch; letter-spacing: -0.01em; }
+    .section-head p { margin: 0; color: var(--muted); max-width: 40ch; }
+    .board { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1.5rem, 4vw, 3.5rem); }
+    .board h3 { font: 400 var(--step-1)/1.2 var(--display); margin: 0 0 1rem; padding-bottom: .75rem; border-bottom: 2px solid var(--ink); }
+    .board ul { list-style: none; margin: 0; padding: 0; }
+    .board li { display: flex; align-items: baseline; gap: .5rem; padding: .55rem 0; }
+    .board li span:first-child { font-weight: 500; }
+    .board li .dots { flex: 1; border-bottom: 2px dotted #c9c9c0; transform: translateY(-4px); }
+    .board li .price { font-variant-numeric: tabular-nums; font-weight: 600; }
+    .board small { display: block; color: var(--muted); font-size: var(--step--1); margin-top: -.25rem; }
+    .sold-out { color: var(--muted); text-decoration: line-through; }
+
+    /* ---------- Pre-order ---------- */
+    .preorder { background: var(--enamel); color: #fff; }
+    .preorder .wrap { display: grid; grid-template-columns: 1fr 1.1fr; gap: clamp(2rem, 6vw, 5rem); align-items: start; }
+    .preorder h2 { font: 400 var(--step-3)/1.05 var(--display); margin: 0 0 1rem; }
+    .preorder .lede { color: rgba(255,255,255,.85); max-width: 34ch; margin: 0 0 1.5rem; }
+    .preorder ol { margin: 0; padding-left: 1.2rem; color: rgba(255,255,255,.9); }
+    .preorder ol li { margin-bottom: .5rem; }
+    form { background: var(--flour); color: var(--ink); border-radius: 24px; padding: clamp(1.5rem, 3vw, 2.25rem); display: grid; gap: 1.1rem; }
+    .field { display: grid; gap: .35rem; }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    label { font-weight: 600; font-size: var(--step--1); }
+    input, select {
+      font: inherit; padding: .8rem .9rem; border-radius: 12px;
+      border: 1.5px solid #cfd0c8; background: #fff; color: var(--ink); width: 100%;
+    }
+    input:focus, select:focus { border-color: var(--enamel); outline: none; box-shadow: 0 0 0 3px rgba(35,64,200,.18); }
+    .error { color: #b3261e; font-size: var(--step--1); min-height: 1.1em; }
+    .form-done { display: none; padding: 1rem 1.1rem; border-radius: 14px; background: #eef7ee; color: #1f5f2c; font-weight: 600; }
+    form.is-sent .form-done { display: block; }
+
+    /* ---------- Visit ---------- */
+    .visit .wrap { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(2rem, 6vw, 5rem); }
+    .hours { width: 100%; border-collapse: collapse; }
+    .hours td { padding: .6rem 0; border-bottom: 1px solid var(--line); }
+    .hours td:last-child { text-align: right; font-variant-numeric: tabular-nums; }
+    .hours tr.is-today td { font-weight: 700; color: var(--enamel); }
+    .map {
+      border-radius: 24px; min-height: 340px;
+      background:
+        url("images/shopfront.jpg") center / cover no-repeat,
+        repeating-linear-gradient(0deg, transparent 0 38px, rgba(35,64,200,.08) 38px 40px),
+        repeating-linear-gradient(90deg, transparent 0 38px, rgba(35,64,200,.08) 38px 40px),
+        #eef0fb;
+      display: flex; align-items: flex-end; padding: 1.25rem;
+    }
+    .map address { font-style: normal; background: var(--flour); padding: .9rem 1.1rem; border-radius: 16px; font-weight: 500; box-shadow: 0 8px 24px rgba(20,26,58,.12); }
+
+    /* ---------- Footer ---------- */
+    footer { background: var(--ink); color: rgba(255,255,255,.75); padding-block: 2.5rem; font-size: var(--step--1); }
+    footer .wrap { display: flex; flex-wrap: wrap; gap: 1rem 2rem; justify-content: space-between; }
+    footer strong { color: #fff; font-family: var(--display); font-weight: 400; font-size: 1.25rem; }
+
+    /* ---------- Responsive ---------- */
+    @media (max-width: 860px) {
+      .nav { display: none; }
+      .menu-toggle { display: block; }
+      .site-header .btn { display: none; }
+      .nav.is-open {
+        display: flex; flex-direction: column; gap: 1rem;
+        position: absolute; top: 68px; left: 0; right: 0;
+        background: var(--flour); padding: 1.25rem var(--gutter); border-bottom: 1px solid var(--line);
+      }
+      .hero .wrap, .preorder .wrap, .visit .wrap { grid-template-columns: 1fr; }
+      .hero-photo { aspect-ratio: 4 / 3; border-radius: 24px 24px 120px 24px; }
+      .oven .wrap { grid-template-columns: 1fr; }
+      .oven-sticky { height: auto; padding-block: 1.25rem; top: 68px; background: var(--sky); z-index: 2; }
+      .oven-sticky h2, .clock-note { display: none; }
+      .clock { font-size: 4.5rem; }
+      .oven-steps { padding: 2rem 0 6rem; }
+      .oven-step { min-height: 70vh; justify-content: flex-start; padding-top: 6vh; }
+      .board { grid-template-columns: 1fr; }
+      .field-row { grid-template-columns: 1fr; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .oven, .oven-step, .btn { transition: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="wrap">
+      <a class="logo" href="#top">Morrow</a>
+      <nav class="nav" id="nav" aria-label="Main">
+        <a href="#oven">Oven times</a>
+        <a href="#bakes">Today's bakes</a>
+        <a href="#visit">Visit</a>
+      </nav>
+      <a class="btn btn-primary" href="#preorder">Pre-order</a>
+      <button class="menu-toggle" aria-expanded="false" aria-controls="nav">Menu</button>
+    </div>
+  </header>
+
+  <main id="top">
+
+    <section class="hero">
+      <div class="wrap">
+        <div>
+          <p class="status" id="status">Open today 7:00 to 16:00</p>
+          <h1>Bread out of the oven at seven, gone by noon.</h1>
+          <p>Sourdough, cardamom buns and pastries, baked in small batches all morning on Mill Lane, Bristol.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#preorder">Pre-order for tomorrow</a>
+            <a class="btn btn-ghost" href="#bakes">See today's bakes</a>
+          </div>
+        </div>
+        <figure class="hero-photo" role="img" aria-label="Fresh sourdough loaves on a wooden board">
+          <figcaption>Country sourdough · 36-hour ferment</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="oven" id="oven" aria-labelledby="oven-title">
+      <div class="wrap">
+        <div class="oven-sticky">
+          <h2 id="oven-title">What comes out of the oven, and when</h2>
+          <div class="clock" id="clock" aria-live="polite">5:00</div>
+          <p class="clock-note">Scroll through our morning. Come at the right time and it's still warm.</p>
+        </div>
+        <ol class="oven-steps">
+          <li class="oven-step" data-time="5:00" data-sky="#141a3a">
+            <time>5:00</time>
+            <h3>The ovens go on</h3>
+            <p>Dough mixed yesterday has proved overnight. Ruth scores the first loaves while the street is still dark.</p>
+          </li>
+          <li class="oven-step" data-time="6:30" data-sky="#1e2a6e">
+            <time>6:30</time>
+            <h3>Country sourdough</h3>
+            <p>Our main loaf: wheat, a little rye, 36 hours from flour to crust. Around 60 a day.</p>
+          </li>
+          <li class="oven-step" data-time="7:00" data-sky="#2340c8">
+            <time>7:00</time>
+            <h3>Doors open</h3>
+            <p>Coffee on, first loaves on the shelf. Pre-orders are ready to collect from now.</p>
+          </li>
+          <li class="oven-step" data-time="8:30" data-sky="#3f6fd8">
+            <time>8:30</time>
+            <h3>Cardamom buns</h3>
+            <p>Rolled, knotted and glazed with cardamom syrup. These usually sell out first.</p>
+          </li>
+          <li class="oven-step" data-time="11:00" data-sky="#f4c542">
+            <time>11:00</time>
+            <h3>Focaccia and sandwiches</h3>
+            <p>Rosemary focaccia comes out for the lunch sandwiches: ham and pickles, or roast squash.</p>
+          </li>
+          <li class="oven-step" data-time="16:00" data-sky="#fafaf7">
+            <time>16:00</time>
+            <h3>Last loaf, then home</h3>
+            <p>Anything left goes half price after 15:00 or to the Mill Lane food bank.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section" id="bakes" aria-labelledby="bakes-title">
+      <div class="wrap">
+        <div class="section-head">
+          <h2 id="bakes-title">Today's bakes</h2>
+          <p>Prices for a whole loaf or one pastry. What's crossed out has already sold out today.</p>
+        </div>
+        <div class="board">
+          <div>
+            <h3>Bread</h3>
+            <ul>
+              <li><span>Country sourdough</span><span class="dots"></span><span class="price">£5.20</span></li>
+              <li><span>Seeded rye</span><span class="dots"></span><span class="price">£5.80</span></li>
+              <li><span>White tin loaf</span><span class="dots"></span><span class="price">£3.90</span></li>
+              <li><span>Rosemary focaccia</span><span class="dots"></span><span class="price">£4.50</span></li>
+            </ul>
+          </div>
+          <div>
+            <h3>Sweet</h3>
+            <ul>
+              <li><span class="sold-out">Cardamom bun</span><span class="dots"></span><span class="price">£3.40</span></li>
+              <li><span>Butter croissant</span><span class="dots"></span><span class="price">£2.90</span></li>
+              <li><span>Seasonal fruit tart</span><span class="dots"></span><span class="price">£4.20</span></li>
+              <li><span>Brown butter brownie</span><span class="dots"></span><span class="price">£3.10</span></li>
+            </ul>
+          </div>
+          <div>
+            <h3>Savoury</h3>
+            <ul>
+              <li><span>Ham, cheddar &amp; pickles</span><span class="dots"></span><span class="price">£7.50</span></li>
+              <li><span>Roast squash &amp; feta</span><span class="dots"></span><span class="price">£7.20</span></li>
+              <li><span>Cheese &amp; onion swirl</span><span class="dots"></span><span class="price">£3.60</span></li>
+              <li><span>Soup of the day</span><span class="dots"></span><span class="price">£5.00</span></li>
+            </ul>
+            <small>Sandwiches from 11:00.</small>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section preorder" id="preorder" aria-labelledby="preorder-title">
+      <div class="wrap">
+        <div>
+          <h2 id="preorder-title">Pre-order and skip the queue</h2>
+          <p class="lede">Order by 18:00 and we'll bake it for you the next morning.</p>
+          <ol>
+            <li>Choose what you want and when you'll collect.</li>
+            <li>We email you to confirm.</li>
+            <li>Pay when you collect, by card or cash.</li>
+          </ol>
+        </div>
+        <form id="preorder-form" novalidate>
+          <div class="field">
+            <label for="name">Your name</label>
+            <input id="name" name="name" autocomplete="name" required>
+            <span class="error" data-for="name"></span>
+          </div>
+          <div class="field">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" autocomplete="email" required>
+            <span class="error" data-for="email"></span>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="item">What would you like?</label>
+              <select id="item" name="item" required>
+                <option value="">Choose a bake</option>
+                <option>Country sourdough</option>
+                <option>Seeded rye</option>
+                <option>Box of 4 cardamom buns</option>
+                <option>Rosemary focaccia</option>
+              </select>
+              <span class="error" data-for="item"></span>
+            </div>
+            <div class="field">
+              <label for="date">Collection day</label>
+              <input id="date" name="date" type="date" required>
+              <span class="error" data-for="date"></span>
+            </div>
+          </div>
+          <button class="btn btn-primary" type="submit">Send pre-order</button>
+          <p class="form-done" role="status">Pre-order sent. Check your email for confirmation.</p>
+        </form>
+      </div>
+    </section>
+
+    <section class="section visit" id="visit" aria-labelledby="visit-title">
+      <div class="wrap">
+        <div>
+          <div class="section-head"><h2 id="visit-title">Visit us</h2></div>
+          <table class="hours" id="hours">
+            <tbody>
+              <tr data-day="1"><td>Monday</td><td>Closed</td></tr>
+              <tr data-day="2"><td>Tuesday</td><td>7:00 – 16:00</td></tr>
+              <tr data-day="3"><td>Wednesday</td><td>7:00 – 16:00</td></tr>
+              <tr data-day="4"><td>Thursday</td><td>7:00 – 16:00</td></tr>
+              <tr data-day="5"><td>Friday</td><td>7:00 – 16:00</td></tr>
+              <tr data-day="6"><td>Saturday</td><td>8:00 – 15:00</td></tr>
+              <tr data-day="0"><td>Sunday</td><td>8:00 – 13:00</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="map" role="img" aria-label="Shopfront of Morrow Bakehouse">
+          <address>14 Mill Lane, Bristol BS1 0XX<br>hello@morrowbakehouse.example</address>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <strong>Morrow</strong>
+      <span>Demo website: Morrow Bakehouse is a fictional business. Design &amp; build by AK.</span>
+    </div>
+  </footer>
+
+  <script>
+    // ----- Hours: open/closed status (shop time = Europe/London) -----
+    const HOURS = { 0: [8, 13], 1: null, 2: [7, 16], 3: [7, 16], 4: [7, 16], 5: [7, 16], 6: [8, 15] };
+    const now = new Date(new Date().toLocaleString("en-US", { timeZone: "Europe/London" }));
+    const today = now.getDay();
+    const hourNow = now.getHours() + now.getMinutes() / 60;
+    const status = document.getElementById("status");
+    const slot = HOURS[today];
+    if (!slot) {
+      status.textContent = "Closed today. Back tomorrow at 7:00";
+      status.classList.add("is-closed");
+    } else if (hourNow < slot[0]) {
+      status.textContent = `Opens today at ${slot[0]}:00`;
+    } else if (hourNow < slot[1]) {
+      status.textContent = `Open now until ${slot[1]}:00`;
+    } else {
+      status.textContent = "Closed for today";
+      status.classList.add("is-closed");
+    }
+    document.querySelector(`#hours tr[data-day="${today}"]`)?.classList.add("is-today");
+
+    // ----- Oven timeline: clock + sky colour follow the scroll -----
+    const oven = document.getElementById("oven");
+    const clock = document.getElementById("clock");
+    const steps = [...document.querySelectorAll(".oven-step")];
+    const lightSkies = ["#f4c542", "#fafaf7"];
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        steps.forEach((s) => s.classList.remove("is-active"));
+        const step = entry.target;
+        step.classList.add("is-active");
+        clock.textContent = step.dataset.time;
+        oven.style.setProperty("--sky", step.dataset.sky);
+        oven.classList.toggle("is-day", lightSkies.includes(step.dataset.sky));
+      });
+    }, { rootMargin: "-45% 0px -45% 0px" });
+    steps.forEach((s) => observer.observe(s));
+
+    // ----- Mobile menu -----
+    const toggle = document.querySelector(".menu-toggle");
+    const nav = document.getElementById("nav");
+    toggle.addEventListener("click", () => {
+      const open = nav.classList.toggle("is-open");
+      toggle.setAttribute("aria-expanded", open);
+      toggle.textContent = open ? "Close" : "Menu";
+    });
+    nav.addEventListener("click", (e) => {
+      if (e.target.matches("a")) { nav.classList.remove("is-open"); toggle.setAttribute("aria-expanded", false); toggle.textContent = "Menu"; }
+    });
+
+    // ----- Pre-order form (front-end demo: connect Formspree to receive emails) -----
+    const form = document.getElementById("preorder-form");
+    const dateInput = document.getElementById("date");
+    const tomorrow = new Date(now); tomorrow.setDate(now.getDate() + 1);
+    dateInput.min = tomorrow.toISOString().slice(0, 10);
+
+    const messages = {
+      name: "Enter your name so we know whose order it is.",
+      email: "Enter an email like name@example.com.",
+      item: "Choose a bake.",
+      date: "Choose a collection day from tomorrow onwards.",
+    };
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      let ok = true;
+      Object.keys(messages).forEach((key) => {
+        const field = form.elements[key];
+        const err = form.querySelector(`[data-for="${key}"]`);
+        let valid = field.checkValidity() && field.value.trim() !== "";
+        if (key === "date" && valid) {
+          valid = field.value >= dateInput.min && new Date(field.value).getDay() !== 1;
+          if (!valid && new Date(field.value).getDay() === 1) { err.textContent = "We're closed on Mondays. Choose another day."; ok = false; return; }
+        }
+        err.textContent = valid ? "" : messages[key];
+        field.setAttribute("aria-invalid", !valid);
+        if (!valid) ok = false;
+      });
+      if (ok) { form.classList.add("is-sent"); form.querySelector("button").textContent = "Pre-order sent"; }
+    });
+  </script>
+</body>
+</html>
